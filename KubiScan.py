@@ -161,7 +161,14 @@ def is_vulnerable_in_middle(current_k8s_version, cve_fixed_version):
 # version1 > version2 return 1
 # version1 < version2 return -1
 # version1 = version2 return 0
+
+def sanitize_version(version):
+    """Remove non-numeric suffixes from Kubernetes version strings."""
+    return re.sub(r'[^0-9\.]', '', version.split('-')[0])
+
 def compare_versions(version1, version2):
+    version1 = sanitize_version(version1)
+    version2 = sanitize_version(version2)
     version1_nums = [int(num) for num in version1.split('.')]
     version2_nums = [int(num) for num in version2.split('.')]
     for i in range(len(version2_nums)):
